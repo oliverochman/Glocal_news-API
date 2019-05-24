@@ -6,11 +6,11 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   def create
-    @article = Article.new(article_params)
-    if @article.save
-      render json: { message: 'all good' }
+    @article = Article.create(article_params)
+    if @article.persisted?
+      render json: { message: 'Successfully created' }
     else
-      render json: { error: @article.errors.full_messages }
+      render status: 422, json: { error: @article.errors.full_messages }
     end
   end
 
@@ -19,5 +19,4 @@ class Api::V1::ArticlesController < ApplicationController
   def article_params
     params.require(:article).permit(:title, :ingress, :body, :image)
   end
-  
 end
